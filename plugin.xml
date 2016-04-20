@@ -14,7 +14,7 @@
   <platform name="android">
     <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
       <intent-filter>
-        <!--        <action android:name="android.intent.action.MAIN" />-->
+        <action android:name="android.intent.action.MAIN" />
         <action android:name="android.intent.action.SEND_MULTIPLE" />
         <action android:name="android.intent.action.SEND" />
         <category android:name="android.intent.category.DEFAULT" />
