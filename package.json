@@ -1,0 +1,23 @@
+{
+  "name": "sam-share-from-gallery",
+  "version": "0.0.1",
+  "cordova": {
+    "id": "sam-share-from-gallery",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "description": "AM Share from Gallery plugin",
+  "repository": "https://github.com/agomezmoron/sam-share-from-gallery.git",
+  "issue": "https://github.com/agomezmoron/sam-share-from-gallery/issues",
+  "keywords": [
+    "ionic",
+    "share",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "Alejandro Gomez",
+  "license": "HP License"
+}

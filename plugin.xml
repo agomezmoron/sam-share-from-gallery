@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="sam-share-from-gallery"
+        version="0.0.1">
+  <name>SAM Share from Gallery plugin</name>
+  <description>SAM Share from Gallery plugin</description>
+  <license>HP License</license>
+  <keywords>Share,apps</keywords>
+  <repo>https://github.com/agomezmoron/sam-share-from-gallery.git</repo>
+  <issue>https://github.com/agomezmoron/sam-share-from-gallery/issues</issue>
+
+  <!-- android -->
+  <platform name="android">
+    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+      <intent-filter>
+        <action android:name="android.intent.action.SEND"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="application/*"/>
+        <data android:mimeType="*/*"/>
+      </intent-filter>
+    </config-file>
+  </platform>
+
+  <!-- ios -->
+  <platform name="ios">
+
+    <resource-file src="src/ios/resources/icon/icon-22x29.png" />
+    <resource-file src="src/ios/resources/icon/icon-44x58.png" />
+    <resource-file src="src/ios/resources/icon/icon-64x64.png" />
+    <resource-file src="src/ios/resources/icon/icon-320x320.png" />
+
+  </platform>
+</plugin>
