@@ -14,10 +14,12 @@
   <platform name="android">
     <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
       <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
         <action android:name="android.intent.action.SEND"/>
+        <action android:name="android.intent.action.EXTRA_ALLOW_MULTIPLE" />
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:mimeType="application/*"/>
-        <data android:mimeType="*/*"/>
+        <data android:mimeType="image/*"/>
       </intent-filter>
     </config-file>
   </platform>
