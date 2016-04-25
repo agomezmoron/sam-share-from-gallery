@@ -12,7 +12,7 @@
 
   <!-- android -->
   <platform name="android">
-    <config-file target="res/xml/config.xml" parent="/*">
+<!--    <config-file target="res/xml/config.xml" parent="/*">
       <feature name="IntentPlugin">
         <param name="android-package" value="com.hubmedia.cordova.plugin.intent.IntentPlugin"/>
       </feature>
@@ -22,7 +22,7 @@
       <clobbers target="IntentPlugin" />
     </js-module>
 
-    <source-file src="src/android/IntentPlugin.java" target-dir="src/com/hubmedia/cordova/plugin/intent" />
+    <source-file src="src/android/IntentPlugin.java" target-dir="src/com/hubmedia/cordova/plugin/intent" />-->
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application/activity" override="yes">
       <intent-filter android:label="@string/launcher_name">
