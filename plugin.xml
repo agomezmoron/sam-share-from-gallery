@@ -30,7 +30,7 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
       <intent-filter>
-        <action android:name="SHARE_TO_HM" />
+        <!--<action android:name="SHARE_TO_HM" />-->
         <action android:name="android.intent.action.MAIN" />
         <action android:name="android.intent.action.SEND_MULTIPLE" />
         <action android:name="android.intent.action.SEND" />

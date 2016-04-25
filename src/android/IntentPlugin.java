@@ -113,6 +113,27 @@ public class IntentPlugin extends CordovaPlugin {
     }
 
     /**
+     * Register handler for onNewIntent event
+     *
+     * @param data
+     * @param context
+     * @return
+     */
+    public boolean getIntent (final JSONArray data, final CallbackContext context) {
+        if(data.length() != 1) {
+            context.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
+            return false;
+        }
+
+        this.onNewIntentCallbackContext = context;
+
+        PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+        result.setKeepCallback(true);
+        context.sendPluginResult(result);
+        return true;
+    }
+
+    /**
      * Triggered on new intent(once the app is raised).
      *
      * @param intent
