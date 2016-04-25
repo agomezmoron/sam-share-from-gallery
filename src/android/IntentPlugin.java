@@ -140,8 +140,7 @@ public class IntentPlugin extends CordovaPlugin {
      */
     @Override
     public void onStart() {
-        Intent i = new Intent(SHARE_TO_HM);
-        this.cordova.startActivityForResult((CordovaPlugin) this,i, 0);
+        
     }
 
     /**
