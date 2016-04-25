@@ -46,7 +46,7 @@ public class IntentPlugin extends CordovaPlugin {
 
     private final String pluginName = "IntentPlugin";
     private CallbackContext onNewIntentCallbackContext = null;
-    private static final SHARE_TO_HM = "SHARE_TO_HM";
+    private static final String SHARE_TO_HM = "SHARE_TO_HM";
 
     /**
      * Generic plugin command executor
