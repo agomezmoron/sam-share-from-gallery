@@ -12,7 +12,22 @@
 
   <!-- android -->
   <platform name="android">
-    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="IntentPlugin">
+        <param name="android-package" value="com.napolitano.cordova.plugin.intent.IntentPlugin"/>
+      </feature>
+    </config-file>
+
+    <js-module src="www/android/IntentPlugin.js" name="IntentPlugin">
+      <clobbers target="IntentPlugin" />
+    </js-module>
+
+    <source-file src="src/android/IntentPlugin.java" target-dir="src/com/napolitano/cordova/plugin/intent" />
+    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity" override="yes">
+      <intent-filter android:label="@string/launcher_name">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <action android:name="android.intent.action.SEND_MULTIPLE" />
@@ -27,10 +42,16 @@
   <!-- ios -->
   <platform name="ios">
 
+    <!-- Copying icons -->
     <resource-file src="src/ios/resources/icon/icon-22x29.png" />
     <resource-file src="src/ios/resources/icon/icon-44x58.png" />
     <resource-file src="src/ios/resources/icon/icon-64x64.png" />
     <resource-file src="src/ios/resources/icon/icon-320x320.png" />
+
+    <!-- Copying the source files -->
+    <source-file src="src/ios/Collection.swift"/>
+    <source-file src="src/ios/ShareViewController.swift"/>
+    <source-file src="src/ios/CollectionsViewController.swift"/>
 
   </platform>
 </plugin>
