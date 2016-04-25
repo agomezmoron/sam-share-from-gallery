@@ -46,6 +46,7 @@ public class IntentPlugin extends CordovaPlugin {
 
     private final String pluginName = "IntentPlugin";
     private CallbackContext onNewIntentCallbackContext = null;
+    private static final SHARE_TO_HM = "SHARE_TO_HM";
 
     /**
      * Generic plugin command executor
@@ -117,9 +118,9 @@ public class IntentPlugin extends CordovaPlugin {
      * @param intent
      */
     @Override
-    public void onCreate(Bundle savedState) {
-        super.onCreate(savedState);
-        onNewIntent(getIntent());
+    public void onStart() {
+        Intent i = new Intent(SHARE_TO_HM);
+        this.cordova.startActivityForResult((CordovaPlugin) this,i, 0);
     }
 
     /**
