@@ -9,7 +9,20 @@
 import Foundation
 
 
-struct SamCollection {
-    var id: Int?
+class SamCollection: NSObject {
+    var id: Int
     var name: String
+    var thumbnail: String?
+    
+    init(id: Int, name: String, thumbnail: String?) {
+        self.id = id
+        self.name = name
+        self.thumbnail = thumbnail
+    }
+}
+
+//extension SamCollection: Equatable{}
+
+func ==(lhs: SamCollection, rhs: SamCollection) -> Bool {
+    return lhs.id == rhs.id
 }

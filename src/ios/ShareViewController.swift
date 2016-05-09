@@ -17,74 +17,206 @@ extension NSMutableData {
     /// Rather than littering my code with calls to `dataUsingEncoding` to convert strings to NSData, and then add that data to the NSMutableData, this wraps it in a nice convenient little extension to NSMutableData. This converts using UTF-8.
     ///
     /// - parameter string:       The string to be added to the `NSMutableData`.
-    
     func appendString(string: String) {
         let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
         appendData(data!)
     }
 }
 
-let baseEndpoint = "http://dev.hubmedia.hpengage.com/hubmedia/api/rest"
-
-class ShareViewController: SLComposeServiceViewController, CollectionsViewControllerDelegate {
+class ShareViewController: UIViewController {
     
-    var availableCollections = [SamCollection](count: 1, repeatedValue: SamCollection(id: nil, name: "Workspace"))
-    var selectedCollection = SamCollection(id: nil, name: "Workspace")
-    var token: String?
+    private var availableCollections = [SamCollection]()
+    private var selectedCollections: SamCollection?
+    private var token: String?
+    private var baseEndpoint: String?
+    let tableviewCellIdentifier = "collectionSelectionCell"
+    private let reuseIdentifier = "imageCell"
+    private var images: [UIImage] = [UIImage]()
+    private var compressedImages: [SamImage] = [SamImage]()
+    private var imagesUrls = [NSURL]()
+    private let serviceGroup = dispatch_group_create()
+    private var assets = [AnyObject]()
+    
+    @IBOutlet var collectionsTable: UITableView!
+    @IBOutlet weak var imagesView: UICollectionView!
+    
+    // Buttons
+    @IBOutlet weak var postButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
+    
+    // Spinners
+    @IBOutlet weak var generalActivityIndicator: UIActivityIndicatorView!
+    
+    // Toast Area variables
+    //    @IBOutlet weak var toastAreaView: UIView!
+    //    @IBOutlet weak var toastMessage: UILabel!
+    
+    @IBAction func cancelSharing(sender: AnyObject) {
+        self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
+    }
+    
+    @IBAction func postImages(sender: AnyObject) {
+        
+        generalActivityIndicator.startAnimating()
+        postButton.enabled = false
+        //        cancelButton.enabled = false
+        
+        for image in compressedImages {
+            uploadImage(image)
+        }
+        
+        dispatch_group_notify(serviceGroup, dispatch_get_main_queue(), {
+            self.generalActivityIndicator.stopAnimating()
+            self.addAssetsToCollection(self.selectedCollections!.id)
+            
+            // TODO show success message
+            //            self.showToast(.Success, message: "Your assets are being added to your collection, you'll have them available in a moment") { _ in
+            
+            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
+            //            }
+        })
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        initSharing()
+        let defaults = NSUserDefaults.init(suiteName: "group.com.amoron.hubmedia.HubMedia")
+        
+        if let endpoint = defaults!.stringForKey("baseEndpoint") {
+            baseEndpoint = endpoint
+        }
+        
+        if let tk = defaults!.stringForKey("token") {
+            token = tk
+        }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        print("Memory warning")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let bottomBorder = UIView.init(frame: CGRectMake(0, imagesView.frame.size.height - 1, imagesView.frame.size.width, 10))
+        bottomBorder.backgroundColor = UIColor(colorLiteralRed: 209, green: 211, blue: 214, alpha: 1)
+        imagesView.addSubview(bottomBorder)
+        
+        generalActivityIndicator.startAnimating()
+        initSharing()
+        
+        collectionsTable.registerClass(CollectionCell.classForCoder(), forCellReuseIdentifier: tableviewCellIdentifier)
+        getImages() {
+            image in
+            if let image = image {
+                
+                self.images.append(image.squareImageTo(CGSize(width: 50, height: 50)))
+                self.compressedImages.append(image)
+                //                dispatch_async(dispatch_get_main_queue()) {
+                //
+                //                }
+                self.imagesView.reloadData()
+            }
+        }
+        
     }
     
-    func initSharing() -> () {
-        let fileManager = NSFileManager.defaultManager()
+    
+    private func getImages(callback: (image: SamImage?) -> Void)  {
         
-        let appGroupDirectoryPath = fileManager.containerURLForSecurityApplicationGroupIdentifier("group.com.amoron.hubmedia.share")
-        let keyFilePath = appGroupDirectoryPath!.URLByAppendingPathComponent("key.txt").path
-        
-        
-        //////// Mocked area
-        let text = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpZ29uemFsZXpAZW1lcmd5YS5jb20iLCJleHAiOjE0NjEyNDk2NTl9.4Zdh8UklqcomGkcdhe7gOwiBK-VuKjCD1MGm-5z0FbDrfTLGsdwuxUrbIdInxgQcpMeK2a7xuQ2GkACFVBhFRg"
-        
-        //writing
-        do {
-            try text.writeToFile(keyFilePath!, atomically: false, encoding: NSUTF8StringEncoding)
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-        ///// End of mocked area
-        
-        //reading
-        do {
-            token = try String(contentsOfFile: keyFilePath!, encoding: NSUTF8StringEncoding)
-            selectedCollection = availableCollections[0]
-            getCollections()
+        if let extensionItems = extensionContext!.inputItems as? [NSExtensionItem] {
             
-        } catch let error as NSError {
-            print(error.localizedDescription)
+            let contentType = kUTTypeImage as String
+            
+            for extensionItem in extensionItems {
+                if let contents = extensionItem.attachments as? [NSItemProvider] {
+                    for attachment in contents {
+                        if attachment.hasItemConformingToTypeIdentifier(contentType) {
+                            
+                            
+                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                                
+                                attachment.loadItemForTypeIdentifier(contentType, options: nil) {
+                                    (imageProvider, error) in
+                                    
+                                    if error == nil {
+                                        
+                                        let url = imageProvider as? NSURL
+                                        self.imagesUrls.append(url!)
+                                        
+                                        if let imageData = NSData(contentsOfURL: url!) {
+                                            
+                                            dispatch_async(dispatch_get_main_queue()) {
+                                                callback(image: SamImage(data: imageData, title: url?.lastPathComponent)!)
+                                            }
+                                            
+                                        } else {
+                                            print("Error casting NSData")
+                                        }
+                                        
+                                    } else {
+                                        let alert = UIAlertController(title: "Error", message: "Error loading image", preferredStyle: .Alert)
+                                        let action = UIAlertAction(title: "Error", style: .Cancel) { _ in
+                                            self.dismissViewControllerAnimated(true, completion: nil)
+                                        }
+                                        
+                                        alert.addAction(action)
+                                        self.presentViewController(alert, animated: true, completion: nil)
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
-    func getCollections() -> () {
+    private func initSharing() -> () {
+        if token != nil {
+            getCollections()
+        } else {
+            showErrorMessage("No HubMedia account", message: "There is not any HubMedia account, please log into HubMedia before sharing content.")
+        }
+    }
+    
+    private func showErrorMessage(title: String, message: String) {
         
-        let endpoint = baseEndpoint + "/collections/"
-        let url = NSURL(string: endpoint)!
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Ok", style: .Cancel) { _ in
+            self.dismissViewControllerAnimated(true, completion: nil)
+            self.extensionContext!.cancelRequestWithError(NSError(domain: message, code: 0, userInfo: nil))
+        }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
-        request.addValue(token!, forHTTPHeaderField: "X-Auth-Token")
+        alert.addAction(action)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    private func getCollections() -> () {
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
+        let endpoint = "\(baseEndpoint!)/collections/"
+        
+        let request = createSignedRequest(endpoint, method: "GET")
+        
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         
         session.dataTaskWithRequest(request, completionHandler:
             { (data, response, error) -> Void in
+                
+                if let error = error {
+                    self.showErrorMessage("Error getting collections", message: error.localizedDescription)
+                    return
+                }
+                
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                
+                if statusCode < 200 || statusCode > 299 {
+                    self.showErrorMessage("Error getting collections", message: "There was an error retrieving your collections")
+                    return
+                }
+                
                 
                 if let data = data {
                     do {
@@ -95,10 +227,24 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
                             
                             let name = anItem["name"] as! String
                             let id = anItem["id"] as! Int
+                            let resources = anItem["resources"] as! [[String: AnyObject]]
+                            var thumbnail: String?
+                            if resources.count > 0 {
+                                thumbnail = resources[0]["thumbnail_url"] as? String
+                            }
                             
-                            let col = SamCollection(id: id, name: name)
+                            let col = SamCollection(id: id, name: name, thumbnail: thumbnail)
                             self.availableCollections.append(col)
                         }
+                        
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.collectionsTable.reloadData()
+                            self.view.sendSubviewToBack(self.collectionsTable)
+                            self.generalActivityIndicator.stopAnimating()
+                        })
+                        
+                        
+                        
                     } catch let error as NSError {
                         print(error)
                     }
@@ -107,46 +253,23 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
         }).resume()
     }
     
-    override func isContentValid() -> Bool {
-        // Do validation of contentText and/or NSExtensionContext attachments here
-        return true
-    }
-    
-    override func didSelectPost() {
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-        if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
-            let contentType = kUTTypeImage as String
-            
-            if let contents = content.attachments as? [NSItemProvider] {
-                for attachment in contents {
-                    if attachment.hasItemConformingToTypeIdentifier(contentType) {
-                        attachment.loadItemForTypeIdentifier(contentType, options: nil) {
-                            data, error in
-                            
-                            let imageUrl = data as! NSURL
-                            
-                            self.uploadImage(imageUrl)
-                            
-                            // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-                            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func uploadImage(imageUrl: NSURL) {
-        let endpoint = "\(baseEndpoint)/assets/staging/"
+    private func createSignedRequest(endpoint: String, method: String) -> NSMutableURLRequest {
         let url = NSURL(string: endpoint)!
         
         let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        request.HTTPMethod = method
         request.addValue(token!, forHTTPHeaderField: "X-Auth-Token")
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
+        return request
+    }
+    
+    private func uploadImage(image: SamImage) {
+        let endpoint = "\(baseEndpoint!)/assets/staging/"
         
+        let request = createSignedRequest(endpoint, method: "GET")
+        
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        dispatch_group_enter(serviceGroup)
         session.dataTaskWithRequest(request, completionHandler:
             { (data, response, error) -> Void in
                 
@@ -159,55 +282,84 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
                 if let data = data {
                     do {
                         
-                        let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers)
+                        guard let jsonResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? NSArray,
+                            let amazonSignature =  jsonResult[0] as? [String: AnyObject]
+                            else {
+                                self.showErrorMessage("Error getting signature", message: "Error parsing signature")
+                                return
+                        }
+                        self.uploadToAmazon(image, amazonSignature: amazonSignature)
                         
-                        let amazonSignature = jsonResult[0] as! Dictionary<String, AnyObject>
-                        
-                        self.uploadToAmazon(imageUrl, amazonSignature: amazonSignature)
+                        dispatch_group_leave(self.serviceGroup)
                     } catch let error as NSError {
                         print(error)
                     }
+                    
+                    
                 }
                 
         }).resume()
     }
     
-    func uploadToAmazon(imageUrl: NSURL, amazonSignature: Dictionary<String, AnyObject>) {
-        let request = createAmazonRequest(imageUrl, amazonSignature: amazonSignature)
+    private func uploadToAmazon(image: SamImage, amazonSignature: Dictionary<String, AnyObject>) {
+        let request = createAmazonRequest(image, amazonSignature: amazonSignature)
         
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
+        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        dispatch_group_enter(serviceGroup)
+        
+        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
         
         session.dataTaskWithRequest(request, completionHandler:
             {
                 data, response, error in
                 
-                if error != nil {
-                    // TODO manage error 
+                if let err = error {
+                    self.showErrorMessage("Error uploading", message: err.localizedDescription)
                     return
                 }
                 
-                self.addAssetToCollection(imageUrl.lastPathComponent!, sourceId: amazonSignature["sourceId"] as! String, connectorId: amazonSignature["connectorId"] as! String)
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
                 
+                if statusCode < 200 || statusCode > 299 {
+                    self.showErrorMessage("Error uploading", message: "There was an error uploading your assets to HubMedia, please try again later")
+                    return
+                }
                 
+                let asset: [String: AnyObject] = [
+                    "type": "PHOTO",
+                    "version": "1.0",
+                    "title": image.title!,
+                    "author_name": "",
+                    "provider_name": NSNull(),
+                    "cache_age": NSNull(),
+                    "thumbnail_url": NSNull(),
+                    "thumbnail_width": 0,
+                    "thumbnail_height": 0,
+                    "url": NSNull(),
+                    "html": NSNull(),
+                    "width": 240,
+                    "height": 240,
+                    "id": amazonSignature["sourceId"] as! String,
+                    "connectorId":  amazonSignature["connectorId"] as! String
+                ]
                 
+                self.assets.append(asset)
+                
+                dispatch_group_leave(self.serviceGroup)
         }).resume()
+        //        }
     }
     
-    ///////
     
-    
-    // TODO Perform request
-    
-    /// Create request
+    /// Create Amazon request
     ///
-    /// - parameter userid:   The userid to be passed to web service
-    /// - parameter password: The password to be passed to web service
+    /// - parameter imageUrl: The url of the image to be uploaded
+    /// - parameter amazonSignature: All data needed to perform the upload to Amazon
     /// - parameter email:    The email address to be passed to web service
     ///
     /// - returns:            The NSURLRequest that was created
     
-    func createAmazonRequest (imageUrl: NSURL, amazonSignature: Dictionary<String, AnyObject>) -> NSURLRequest {
+    private func createAmazonRequest (image: SamImage, amazonSignature: Dictionary<String, AnyObject>) -> NSURLRequest {
         // TODO create params dictionary
         let param = amazonSignature["params"] as! Dictionary<String, String>
         
@@ -219,60 +371,43 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
         request.HTTPMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-//        let path1 = NSBundle.mainBundle().pathForResource("image1", ofType: "png") as String!
-//        let path1 = imageUrl.path
-        request.HTTPBody = createBodyWithParameters(param, filePathKey: "file", imageUrl: imageUrl, boundary: boundary)
+        request.HTTPBody = createBodyWithParameters(param, filePathKey: "file", image: image, boundary: boundary)
         
         return request
     }
     
     /// Create body of the multipart/form-data request
     ///
-    /// - parameter parameters:   The optional dictionary containing keys and values to be passed to web service
-    /// - parameter filePathKey:  The optional field name to be used when uploading files. If you supply paths, you must supply filePathKey, too.
-    /// - parameter paths:        The optional array of file paths of the files to be uploaded
+    /// - parameter parameters:   The dictionary containing keys and values to be passed to web service
+    /// - parameter filePathKey:  The field name to be used when uploading files. If you supply paths, you must supply filePathKey, too.
+    /// - parameter imageUrl:     The file path of the file to be uploaded
     /// - parameter boundary:     The multipart/form-data boundary
     ///
     /// - returns:                The NSData of the body of the request
     
-    func createBodyWithParameters(parameters: [String: String]?, filePathKey: String?, imageUrl: NSURL, boundary: String) -> NSData {
+    private func createBodyWithParameters(parameters: [String: String], filePathKey: String, image: SamImage, boundary: String) -> NSData {
         let body = NSMutableData()
         
-        if parameters != nil {
-            for (key, value) in parameters! {
-                body.appendString("--\(boundary)\r\n")
-                body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-                body.appendString("\(value)\r\n")
-            }
+        
+        for (key, value) in parameters {
+            body.appendString("--\(boundary)\r\n")
+            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.appendString("\(value)\r\n")
         }
         
-        let filename = imageUrl.lastPathComponent
-        let data = NSData(contentsOfURL: imageUrl)!
-        let mimetype = mimeTypeForPath(imageUrl.path!)
+        
+        let filename = image.title
+        let data = image.jpegResized(CGSize(width: 1024, height: 1024))
+        let mimetype = "image/jpeg"
         
         body.appendString("--\(boundary)\r\n")
-        body.appendString("Content-Disposition: form-data; name=\"\(filePathKey!)\"; filename=\"\(filename!)\"\r\n")
+        body.appendString("Content-Disposition: form-data; name=\"\(filePathKey)\"; filename=\"\(filename!)\"\r\n")
         body.appendString("Content-Type: \(mimetype)\r\n\r\n")
         body.appendData(data)
         body.appendString("\r\n")
         
-        
-//        if paths != nil {
-//            for path in paths! {
-//                let url = NSURL(fileURLWithPath: path)
-//                let filename = url.lastPathComponent
-//                let data = NSData(contentsOfURL: url)!
-//                let mimetype = mimeTypeForPath(path)
-//                
-//                body.appendString("--\(boundary)\r\n")
-//                body.appendString("Content-Disposition: form-data; name=\"\(filePathKey!)\"; filename=\"\(filename!)\"\r\n")
-//                body.appendString("Content-Type: \(mimetype)\r\n\r\n")
-//                body.appendData(data)
-//                body.appendString("\r\n")
-//            }
-//        }
-        
         body.appendString("--\(boundary)--\r\n")
+        
         return body
     }
     
@@ -280,7 +415,7 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
     ///
     /// - returns:            The boundary string that consists of "Boundary-" followed by a UUID string.
     
-    func generateBoundaryString() -> String {
+    private func generateBoundaryString() -> String {
         return "Boundary-\(NSUUID().UUIDString)"
     }
     
@@ -292,7 +427,7 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
     ///
     /// - returns:                Returns the mime type if successful. Returns application/octet-stream if unable to determine mime type.
     
-    func mimeTypeForPath(path: String) -> String {
+    private func mimeTypeForPath(path: String) -> String {
         let url = NSURL(fileURLWithPath: path)
         let pathExtension = url.pathExtension
         
@@ -304,40 +439,16 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
         return "application/octet-stream";
     }
     
-    func addAssetToCollection(filename: String, sourceId: String, connectorId: String) {
-        let endpoint = "\(baseEndpoint)/collections/\(selectedCollection.id!)/assets"
+    private func addAssetsToCollection(selectedCollection: Int) {
+        let endpoint = "\(baseEndpoint!)/collections/\(selectedCollection)/assets"
         
-        let asset: [String: AnyObject] = [
-            "type": "PHOTO",
-            "version": "1.0",
-            "title": filename,
-            "author_name": "",
-            "provider_name": NSNull(),
-            "cache_age": NSNull(),
-            "thumbnail_url": NSNull(),
-            "thumbnail_width": 0,
-            "thumbnail_height": 0,
-            "url": NSNull(),
-            "html": NSNull(),
-            "width": 240,
-            "height": 240,
-            "id": sourceId,
-            "connectorId": connectorId
-        ]
-        
-        let assetsList = [asset]
-        
-        let request = NSMutableURLRequest(URL: NSURL(string: endpoint)!)
+        let request = createSignedRequest(endpoint, method: "POST")
         let session = NSURLSession.sharedSession()
         
-        request.HTTPMethod = "POST"
-        
-        
         do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(assetsList, options: NSJSONWritingOptions.PrettyPrinted)
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(assets, options: .PrettyPrinted)
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue(token!, forHTTPHeaderField: "X-Auth-Token")
             
             session.dataTaskWithRequest(request, completionHandler: {
                 data, response, error in
@@ -356,38 +467,77 @@ class ShareViewController: SLComposeServiceViewController, CollectionsViewContro
         }
         
     }
+}
 
-    
-    override func configurationItems() -> [AnyObject]! {
-        
-        // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-        return [collectionsConfigurationItem]
+extension ShareViewController: UITableViewDataSource {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return availableCollections.count
     }
     
-    lazy var collectionsConfigurationItem: SLComposeSheetConfigurationItem = {
-        let item = SLComposeSheetConfigurationItem()
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        item.title = "Collection"
-        item.value = self.selectedCollection.name
-        item.tapHandler = self.showCollectionSelection
+        let collectionCell = tableView.dequeueReusableCellWithIdentifier(self.tableviewCellIdentifier, forIndexPath: indexPath) as! CollectionCell
         
-        return item
-    }()
+        collectionCell.addCollection(availableCollections[indexPath.row])
+        
+        if selectedCollections == collectionCell.collection {
+            collectionCell.accessoryType = .Checkmark
+        } else {
+            collectionCell.accessoryType = .None
+        }
+        
+        return collectionCell
+    }
+}
+
+extension ShareViewController: UICollectionViewDataSource {
     
-    // Shows the collection selection view
-    func showCollectionSelection() {
-        let controller = CollectionsViewController(style: .Plain)
-        controller.availableCollections = availableCollections
-        controller.selectedCollection = selectedCollection
-        controller.delegate = self
-        pushConfigurationViewController(controller)
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
     }
     
-    // One the user selects a configuration item (color), we remember the value and pop
-    // the color selection view controller
-    func collectionSelection(sender: CollectionsViewController, selectedValue: SamCollection) {
-        collectionsConfigurationItem.value = selectedValue.name
-        selectedCollection = selectedValue
-        popConfigurationViewController()
-    }    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return images.count
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell:ImageCell = imagesView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ImageCell
+        
+        //        let img = images[indexPath.row]
+        //        if img.size.width > img.size.height {
+        //            cell.Image.contentMode = .ScaleAspectFit
+        //        }
+        
+        cell.Image.image = images[indexPath.row]
+        cell.layer.cornerRadius = 8.0
+        
+        
+        // Configure the cell
+        return cell
+    }
+}
+
+extension ShareViewController: UITableViewDelegate {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if !generalActivityIndicator.isAnimating() {
+            let cell = tableView.cellForRowAtIndexPath(indexPath) as! CollectionCell
+            
+            if cell.collection == selectedCollections {
+                selectedCollections = nil
+                cell.accessoryType = .None
+                postButton.enabled = false
+            } else {
+                tableView.visibleCells.forEach({ visibleCell in
+                    visibleCell.accessoryType = .None
+                })
+                
+                selectedCollections = cell.collection
+                cell.accessoryType = .Checkmark
+                postButton.enabled = true
+            }
+            
+            tableView.reloadData()
+            view.sendSubviewToBack(tableView)
+        }
+    }
 }
