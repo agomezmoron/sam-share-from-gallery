@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.1">
+        version="0.0.2">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
