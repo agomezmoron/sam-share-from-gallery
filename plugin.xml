@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.3">
+        version="0.0.4">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -47,12 +47,12 @@
     <resource-file src="src/ios/resources/icon/icon-320x320.png" />
       
     <!-- Copying additional iOS files -->
-    <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target-dir="HubMedia/Base.lproj/MainInterface.storyboard" />
-    <resource-file src="src/ios/Media.xcassets/Contents.json" target-dir="HubMedia/Media.xcassets/Contents.json" />
-    <resource-file src="src/ios/Media.xcassets/no-image.imageset/Contents.json" target-dir="HubMedia/Media.xcassets/no-image.imageset/Contents.json" />
-    <resource-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-1.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available-1.png" />
-    <resource-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-2.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available-2.png" />
-    <resource-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available.png" />
+    <source-file src="src/ios/Base.lproj/MainInterface.storyboard" target-dir="HubMedia/Base.lproj/MainInterface.storyboard" />
+    <source-file src="src/ios/Media.xcassets/Contents.json" target-dir="HubMedia/Media.xcassets/Contents.json" />
+    <source-file src="src/ios/Media.xcassets/no-image.imageset/Contents.json" target-dir="HubMedia/Media.xcassets/no-image.imageset/Contents.json" />
+    <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-1.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available-1.png" />
+    <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-2.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available-2.png" />
+    <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available.png" />
 
     <!-- Copying header files -->
     <header-file src="src/ios/HubMedia-Bridging-Header.h" target-dir="HubMedia"/>
