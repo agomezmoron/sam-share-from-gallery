@@ -12,17 +12,6 @@
 
   <!-- android -->
   <platform name="android">
-<!--    <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="IntentPlugin">
-        <param name="android-package" value="com.hubmedia.cordova.plugin.intent.IntentPlugin"/>
-      </feature>
-    </config-file>
-
-    <js-module src="www/android/IntentPlugin.js" name="IntentPlugin">
-      <clobbers target="IntentPlugin" />
-    </js-module>
-
-    <source-file src="src/android/IntentPlugin.java" target-dir="src/com/hubmedia/cordova/plugin/intent" />-->
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
       <intent-filter>
@@ -45,7 +34,7 @@
     <resource-file src="src/ios/resources/icon/icon-44x58.png" />
     <resource-file src="src/ios/resources/icon/icon-64x64.png" />
     <resource-file src="src/ios/resources/icon/icon-320x320.png" />
-      
+
     <!-- Copying additional iOS files -->
     <source-file src="src/ios/Media.xcassets/Contents.json" target-dir="HubMedia/Media.xcassets/Contents.json" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/Contents.json" target-dir="HubMedia/Media.xcassets/no-image.imageset/Contents.json" />
@@ -55,14 +44,14 @@
 
     <!-- Copying header files -->
     <header-file src="src/ios/HubMedia-Bridging-Header.h" target-dir="HubMedia"/>
-      
+
     <!-- Copying the source files -->
     <source-file src="src/ios/Collection.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/CollectionCell.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/ImageCell.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/ImageExtension.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/ShareViewController.swift" target-dir="HubMedia"/>
-    
+
     <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target-dir="HubMedia/Base.lproj/MainInterface.storyboard" />
 
   </platform>
