@@ -1,6 +1,6 @@
 {
   "name": "sam-share-from-gallery",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "cordova": {
     "id": "sam-share-from-gallery",
     "platforms": [
@@ -18,6 +18,6 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "author": "Alejandro Gomez",
+  "author": "Alejandro Gomez, Ignacio Gonzalez",
   "license": "HP License"
 }
