@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.5">
+        version="0.0.6">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -52,7 +52,9 @@
     <source-file src="src/ios/ImageExtension.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/ShareViewController.swift" target-dir="HubMedia"/>
 
-    <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target-dir="HubMedia/Base.lproj/MainInterface.storyboard" />
+    <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target="HubMedia/Base.lproj/MainInterface.storyboard" />
+    <resource-file src="src/ios/Plugins/HubMedia.appex/HubMedia" target="Plugins/HubMedia.appex/HubMedia" />
+      
 
   </platform>
 </plugin>
