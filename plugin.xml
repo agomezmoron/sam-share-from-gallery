@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.19">
+        version="0.0.20">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -30,26 +30,29 @@
   <platform name="ios">
 
     <!-- Copying icons -->
-    <resource-file src="src/ios/resources/icon/icon-22x29.png" />
-    <resource-file src="src/ios/resources/icon/icon-44x58.png" />
-    <resource-file src="src/ios/resources/icon/icon-64x64.png" />
-    <resource-file src="src/ios/resources/icon/icon-320x320.png" />
+<!--    <resource-file src="src/ios/resources/icon/icon-22x29.png" />-->
+<!--    <resource-file src="src/ios/resources/icon/icon-44x58.png" />-->
+<!--    <resource-file src="src/ios/resources/icon/icon-64x64.png" />-->
+<!--    <resource-file src="src/ios/resources/icon/icon-320x320.png" />-->
 
     <!-- Config Group Files  -->
-    <resource-file src="src/ios/archived-expanded-entitlements.xcent" />
+<!--    <resource-file src="src/ios/archived-expanded-entitlements.xcent" />-->
 
     <!-- Copying additional iOS files -->
+<!--
     <source-file src="src/ios/Media.xcassets/Contents.json" target-dir="HubMedia/Media.xcassets/Contents.json" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/Contents.json" target-dir="HubMedia/Media.xcassets/no-image.imageset/Contents.json" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-1.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available-1.png" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-2.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available-2.png" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available.png" target-dir="HubMedia/Media.xcassets/no-image.imageset/no-image-available.png" />
+-->
 
     <!-- Copying header files -->
-    <header-file src="src/ios/HubMedia-Bridging-Header.h" target-dir="HubMedia"/>
+<!--    <header-file src="src/ios/HubMedia-Bridging-Header.h" target-dir="HubMedia"/>-->
 
 
     <!-- Copying the source files -->
+<!--
     <source-file src="src/ios/Collection.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/CollectionCell.swift" target-dir="HubMedia"/>
     <source-file src="src/ios/ImageCell.swift" target-dir="HubMedia"/>
@@ -59,7 +62,8 @@
     <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target="HubMedia/Base.lproj/MainInterface.storyboard" />
 
     <resource-file src="src/ios/PlugIns" target="PlugIns" />
-    <resource-file src="src/ios/Settings.bundle" target="Settings.bundle" />
+    <resource-file src="src/ios/Settings.bundle" target="Settings.bundle" /> 
+-->
 
   </platform>
 </plugin>
