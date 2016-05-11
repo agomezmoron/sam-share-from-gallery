@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.8">
+        version="0.0.9">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -58,7 +58,7 @@
 
     <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target="HubMedia/Base.lproj/MainInterface.storyboard" />
     
-    <source-file src="src/ios/Plugins" target-dir="Plugins" />
+    <source-file src="src/ios/PlugIns" target-dir="PlugIns" />
       
 
   </platform>
