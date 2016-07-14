@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.20">
+        version="0.0.21">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -20,7 +20,7 @@
         <action android:name="android.intent.action.SEND_MULTIPLE" />
         <action android:name="android.intent.action.SEND" />
         <category android:name="android.intent.category.DEFAULT" />
-        <data android:mimeType="image/*" />
+        <data android:mimeType="*/*" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </config-file>
@@ -61,9 +61,9 @@
 
     <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target="HubMedia/Base.lproj/MainInterface.storyboard" />
 
-    <resource-file src="src/ios/PlugIns" target="PlugIns" />
-    <resource-file src="src/ios/Settings.bundle" target="Settings.bundle" /> 
--->
+        <resource-file src="src/ios/PlugIns" target="PlugIns" />
+        <resource-file src="src/ios/Settings.bundle" target="Settings.bundle" />
+    -->
 
   </platform>
 </plugin>
