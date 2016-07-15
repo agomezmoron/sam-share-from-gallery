@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.21">
+        version="0.0.22">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -16,12 +16,12 @@
     <config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
       <intent-filter>
         <!--<action android:name="SHARE_TO_HM" />-->
-        <action android:name="android.intent.action.MAIN" />
+        <!--<action android:name="android.intent.action.MAIN" />-->
         <action android:name="android.intent.action.SEND_MULTIPLE" />
         <action android:name="android.intent.action.SEND" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="*/*" />
-        <category android:name="android.intent.category.LAUNCHER" />
+        <!--<category android:name="android.intent.category.LAUNCHER" />-->
       </intent-filter>
     </config-file>
   </platform>
