@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.29">
+        version="0.0.30">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -74,7 +74,7 @@
       
     <resource-file src="src/ios/Settings.bundle/.me.apla.apppreferences" target="Settings.bundle/.me.apla.apppreferences" />
     <resource-file src="src/ios/Settings.bundle/en.lproj/Root.strings" target="Settings.bundle/en.lproj/Root.strings" />
-    <resource-file src="src/ios/Root.plist" />
+    <resource-file src="src/ios/Settings.bundleRoot.plist" target="Settings.bundle/en.lproj/Root.plist" />
 
     <!-- Copying additional iOS files -->
 <!--
