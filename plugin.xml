@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.27">
+        version="0.0.28">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -36,20 +36,21 @@
 <!--    <resource-file src="src/ios/resources/icon/icon-320x320.png" />-->
 
     <!-- Config Group Files  -->
+<!--
     <resource-file src="src/ios/archived-expanded-entitlements.xcent" />
     <resource-file src="src/ios/build-debug.xcconfig" />
     <resource-file src="src/ios/build-release.xcconfig" />
     <resource-file src="src/ios/build.xcconfig" />
     <resource-file src="src/ios/Settings.bundle" />
     
-    <resource-file src="src/ios/Frameworks/libswiftContacts.dylib" target="Frameworks/libswiftContacts.dylib"/>
-    <resource-file src="src/ios/Frameworks/libswiftCore.dylib" target="Frameworks/libswiftCore.dylib" />
-    <resource-file src="src/ios/Frameworks/libswiftCoreGraphics.dylib" target="Frameworks/libswiftCoreGraphics.dylib" />
-    <resource-file src="src/ios/Frameworks/libswiftCoreImage.dylib" target="Frameworks/libswiftCoreImage.dylib" />
-    <resource-file src="src/ios/Frameworks/libswiftDarwin.dylib" target="Frameworks/libswiftDarwin.dylib" />
-    <resource-file src="src/ios/Frameworks/libswiftDispatch.dylib" target="Frameworks/libswiftDispatch.dylib" />
-    <resource-file src="src/ios/Frameworks/libswiftFoundation.dylib" target="Frameworks/libswiftFoundation.dylib" />
-    <resource-file src="src/ios/Frameworks/libswiftObjectiveC.dylib" target="Frameworks/libswiftObjectiveC.dylib" />
+    <framework src="src/ios/Frameworks/libswiftContacts.dylib" target="Frameworks/libswiftContacts.dylib"/>
+    <framework src="src/ios/Frameworks/libswiftCore.dylib" target="Frameworks/libswiftCore.dylib" />
+    <framework src="src/ios/Frameworks/libswiftCoreGraphics.dylib" target="Frameworks/libswiftCoreGraphics.dylib" />
+    <framework src="src/ios/Frameworks/libswiftCoreImage.dylib" target="Frameworks/libswiftCoreImage.dylib" />
+    <framework src="src/ios/Frameworks/libswiftDarwin.dylib" target="Frameworks/libswiftDarwin.dylib" />
+    <framework src="src/ios/Frameworks/libswiftDispatch.dylib" target="Frameworks/libswiftDispatch.dylib" />
+    <framework src="src/ios/Frameworks/libswiftFoundation.dylib" target="Frameworks/libswiftFoundation.dylib" />
+    <framework src="src/ios/Frameworks/libswiftObjectiveC.dylib" target="Frameworks/libswiftObjectiveC.dylib" />
       
     <resource-file src="src/ios/Plugins/fromGallery.appex/_CodeSignature/CodeResources" target="Plugins/fromGallery.appex/_CodeSignature/CodeResources" />
     <resource-file src="src/ios/Plugins/fromGallery.appex/archived-expanded-entitlements.xcent" 
@@ -69,6 +70,7 @@
     <resource-file src="src/ios/Settings.bundle/.me.apla.apppreferences" target="Settings.bundle/.me.apla.apppreferences" />
     <resource-file src="src/ios/Settings.bundle/en.lproj/Root.strings" target="Settings.bundle/en.lproj/Root.strings" />
     <resource-file src="src/ios/Root.plist" />
+-->
 
     <!-- Copying additional iOS files -->
 <!--
