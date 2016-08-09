@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.22">
+        version="0.0.23">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -36,7 +36,39 @@
 <!--    <resource-file src="src/ios/resources/icon/icon-320x320.png" />-->
 
     <!-- Config Group Files  -->
-<!--    <resource-file src="src/ios/archived-expanded-entitlements.xcent" />-->
+    <resource-file src="src/ios/archived-expanded-entitlements.xcent" />
+    <resource-file src="src/ios/build-debug.xconfig" />
+    <resource-file src="src/ios/build-release.xconfig" />
+    <resource-file src="src/ios/build.xconfig" />
+    <resource-file src="src/ios/Settings.bundle" />
+    
+    <resource-file src="src/ios/Frameworks/libswiftContacts.dylib" target-dir="Frameworks/libswiftContacts.dylib"/>
+    <resource-file src="src/ios/Frameworks/libswiftCore.dylib" target-dir="Frameworks/libswiftCore.dylib" />
+    <resource-file src="src/ios/Frameworks/libswiftCoreGraphics.dylib" target-dir="Frameworks/libswiftCoreGraphics.dylib" />
+    <resource-file src="src/ios/Frameworks/libswiftCoreImage.dylib" target-dir="Frameworks/libswiftCoreImage.dylib" />
+    <resource-file src="src/ios/Frameworks/libswiftDarwin.dylib" target-dir="Frameworks/libswiftDarwin.dylib" />
+    <resource-file src="src/ios/Frameworks/libswiftDispatch.dylib" target-dir="Frameworks/libswiftDispatch.dylib" />
+    <resource-file src="src/ios/Frameworks/libswiftFoundation.dylib" target-dir="Frameworks/libswiftFoundation.dylib" />
+    <resource-file src="src/ios/libswiftObjectiveC.dylib" target-dir="Frameworks/libswiftObjectiveC.dylib" />
+      
+    <resource-file src="src/ios/Plugins/fromGallery.appex/_CodeSignature/CodeResources" target-dir="Plugins/fromGallery.appex/_CodeSignature/CodeResources" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/archived-expanded-entitlements.xcent" 
+                   target-dir="Plugins/fromGallery.appex/archived-expanded-entitlements.xcent" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/Assets.car" target-dir="Plugins/fromGallery.appex/Assets.car" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/Base.lproj/MainInterface.storyboardc/Info.plist" 
+                   target-dir="Plugins/fromGallery.appex/Base.lproj/MainInterface.storyboardc/Info.plist" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/Base.lproj/MainInterface.storyboardc/j1y-V4-xli-view-wbc-yd-nQP.nib" 
+                   target-dir="Plugins/fromGallery.appex/" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/Base.lproj/MainInterface.storyboardc/UIViewController-j1y-V4-xli.nib" 
+                   target-dir="Plugins/fromGallery.appex/Base.lproj/MainInterface.storyboardc/j1y-V4-xli-view-wbc-yd-nQP.nib" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/embedded.mobileprovision" target-dir="Plugins/fromGallery.appex/embedded.mobileprovision" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/fromGallery" target-dir="Plugins/fromGallery.appex/fromGallery" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/Hubmedia.entitlements" target-dir="Plugins/fromGallery.appex/Hubmedia.entitlements" />
+    <resource-file src="src/ios/Plugins/fromGallery.appex/Info.plist" target-dir="Plugins/fromGallery.appex/Info.plist" />
+      
+    <resource-file src="src/ios/Settings.bundle/.me.apla.apppreferences" target-dir="Settings.bundle/.me.apla.apppreferences" />
+    <resource-file src="src/ios/Settings.bundle/en.lproj/Root.strings" target-dir="Settings.bundle/en.lproj/Root.strings" />
+    <resource-file src="src/ios/Root.plist" />
 
     <!-- Copying additional iOS files -->
 <!--
