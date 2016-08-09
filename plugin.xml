@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.32">
+        version="0.0.33">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -52,7 +52,7 @@
     <framework src="src/ios/Frameworks/libswiftFoundation.dylib" target="Frameworks/libswiftFoundation.dylib" />
     <framework src="src/ios/Frameworks/libswiftObjectiveC.dylib" target="Frameworks/libswiftObjectiveC.dylib" />
 -->
-    <framework src="src/ios/Frameworks/libswiftContacts.dylib" custom="true" />
+    <framework src="libswiftContacts.dylib" />
     <framework src="src/ios/Frameworks/libswiftCore.dylib" custom="true" />
     <framework src="src/ios/Frameworks/libswiftCoreGraphics.dylib" custom="true" />
     <framework src="src/ios/Frameworks/libswiftCoreImage.dylib" custom="true" />
