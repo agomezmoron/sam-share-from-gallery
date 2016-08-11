@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.38">
+        version="0.0.39">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -36,13 +36,11 @@
 <!--    <resource-file src="src/ios/resources/icon/icon-320x320.png" />-->
 
     <!-- Config Group Files  -->
-<!--
     <config-file src="src/ios/archived-expanded-entitlements.xcent" />
     <resource-file src="src/ios/build-debug.xcconfig" />
     <resource-file src="src/ios/build-release.xcconfig" />
     <resource-file src="src/ios/build.xcconfig" />
     <resource-file src="src/ios/Settings.bundle" />
--->
     
 <!--
     <framework src="src/ios/Frameworks/libswiftContacts.dylib" target="Frameworks/libswiftContacts.dylib"/>
