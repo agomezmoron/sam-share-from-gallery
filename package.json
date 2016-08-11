@@ -1,6 +1,6 @@
 {
   "name": "sam-share-from-gallery",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "cordova": {
     "id": "sam-share-from-gallery",
     "platforms": [

@@ -2,7 +2,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="sam-share-from-gallery"
-        version="0.0.39">
+        version="0.0.40">
   <name>SAM Share from Gallery plugin</name>
   <description>SAM Share from Gallery plugin</description>
   <license>HP License</license>
@@ -36,11 +36,13 @@
 <!--    <resource-file src="src/ios/resources/icon/icon-320x320.png" />-->
 
     <!-- Config Group Files  -->
+<!--
     <config-file src="src/ios/archived-expanded-entitlements.xcent" />
     <resource-file src="src/ios/build-debug.xcconfig" />
     <resource-file src="src/ios/build-release.xcconfig" />
     <resource-file src="src/ios/build.xcconfig" />
     <resource-file src="src/ios/Settings.bundle" />
+-->
     
 <!--
     <framework src="src/ios/Frameworks/libswiftContacts.dylib" target="Frameworks/libswiftContacts.dylib"/>
@@ -63,6 +65,7 @@
     <source-file src="src/ios/Frameworks/libswiftObjectiveC.dylib" custom="true" />
 -->
       
+<!--
     <resource-file src="src/ios/Plugins/fromGallery.appex/_CodeSignature/CodeResources" 
                    target="Plugins/fromGallery.appex/_CodeSignature/CodeResources" />
     <config-file src="src/ios/Plugins/fromGallery.appex/archived-expanded-entitlements.xcent" 
@@ -87,6 +90,7 @@
     <resource-file src="src/ios/Settings.bundle/.me.apla.apppreferences" target="Settings.bundle/.me.apla.apppreferences" />
     <resource-file src="src/ios/Settings.bundle/en.lproj/Root.strings" target="Settings.bundle/en.lproj/Root.strings" />
     <resource-file src="src/ios/Settings.bundle/Root.plist" target="Settings.bundle/en.lproj/Root.plist" />
+-->
 
     <!-- Copying additional iOS files -->
 <!--
@@ -119,17 +123,20 @@
 <!--    <resource-file src="src/ios/archived-expanded-entitlements.xcent" />-->
 
     <!-- Copying additional iOS files -->
+<!--
     <source-file src="src/ios/Media.xcassets/Contents.json" target-dir="fromGallery/Media.xcassets/Contents.json" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/Contents.json" target-dir="fromGallery/Media.xcassets/no-image.imageset/Contents.json" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-1.png" target-dir="fromGallery/Media.xcassets/no-image.imageset/no-image-available-1.png" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available-2.png" target-dir="fromGallery/Media.xcassets/no-image.imageset/no-image-available-2.png" />
     <source-file src="src/ios/Media.xcassets/no-image.imageset/no-image-available.png" target-dir="fromGallery/Media.xcassets/no-image.imageset/no-image-available.png" />
+-->
 
     <!-- Copying header files -->
 <!--    <header-file src="src/ios/HubMedia-Bridging-Header.h" target-dir="HubMedia"/>-->
 
 
     <!-- Copying the source files -->
+<!--
     <source-file src="src/ios/Collection.swift" target-dir="fromGallery"/>
     <source-file src="src/ios/CollectionCell.swift" target-dir="fromGallery"/>
     <source-file src="src/ios/ImageCell.swift" target-dir="fromGallery"/>
@@ -137,6 +144,7 @@
     <source-file src="src/ios/ShareViewController.swift" target-dir="fromGallery"/>
 
     <resource-file src="src/ios/Base.lproj/MainInterface.storyboard" target="fromGallery/Base.lproj/MainInterface.storyboard" />
+-->
 
 <!--    <resource-file src="src/ios/PlugIns" target="PlugIns" />-->
 <!--    <resource-file src="src/ios/Settings.bundle" target="Settings.bundle" />-->
